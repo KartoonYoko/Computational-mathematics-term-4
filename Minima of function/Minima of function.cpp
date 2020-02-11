@@ -67,6 +67,26 @@ double goldRatio(double a, double b, func f, double eps) {
 	return (a + b) / 2;
 }
 
+
+
+// пассивный поиск
+double passiveSearching(double a, double b, func f, double eps) {
+	int n = static_cast<int>(b - a) / eps;
+	double min = f(a);
+	for (int i = 1; i <= n; i++) {
+		a += i * (b - a) / eps;
+		double buf = f(a);
+		if (min < buf)
+			min = buf;
+	}
+	return min;
+}
+
+
+
+
+
+
 int main()
 {
 	func f = [](double x)->double {
@@ -80,5 +100,5 @@ int main()
 
 	svenn(x0, d, f, a, b);
 	//std::cout « a « "; " « b « std::endl;
-	std::cout << methodOfHaldDivide(a, b, f, 0.00001) << "; " << goldRatio(a, b, f, 0.001) << std::endl;
+	std::cout << methodOfHaldDivide(a, b, f, 0.01) << "; " << goldRatio(a, b, f, 0.01) <<  "; " << passiveSearching(a, b, f, 0.01) << std::endl;
 }
