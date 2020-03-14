@@ -1,6 +1,8 @@
 from sympy import *  # diff, symbols
 from math import sqrt
-
+""" 
+    Метод Ньютона позволяет найти точку минимума функции
+"""
 
 eps = 0.0001
 x, y = symbols('x y')
@@ -15,18 +17,34 @@ dx_dx = diff(dx, x)
 dy_dy = diff(dy, y)
 
 # print(my_equation.subs({x:1,y:1}))
-# Матрица Гессе
+# Матрица Гессе (содержит формулы для расчета)
 Hesse = Matrix([[dx_dx, dx_dy], [dx_dy, dy_dy]])
-# Вектор антиградиента
+# Вектор антиградиента (содержит формулы для расчета)
 anti_gradient = Matrix([-1 * dx, -1 * dy])
 
 # Основной алгоритм
-# точка пространства
+# нгачальная точка пространства
 x_point = 0
 y_point = 0
-# Длина вектора антиградиента
+first_point = Matrix([x_point, y_point])
+# Длина вектора антиградиента (в начальной точке)
 len_anti = sqrt(anti_gradient[0, 0].subs({x: x_point, y: y_point}) ** 2 + anti_gradient[1, 0].subs({x: x_point, y: y_point}) ** 2)
-# Обратная матрица Гессе
+# Обратная матрица Гессе (в начальной точке)
 Hesse_reverse = simplify(Hesse ** (-1)).subs({x: 0, y: 0})
+# Вектор антиградиента (в начальной точке)
+anti_grad = anti_gradient.subs({x: 0, y: 0})
+print('начало')
 while eps < len_anti:
-    pass
+    print(len_anti)
+    second_point = first_point + Hesse_reverse * anti_grad
+    x_point = second_point[0]
+    y_point = second_point[1]
+    first_point = second_point
+    # Длина вектора антиградиента (в точке)
+    len_anti = sqrt(anti_gradient[0, 0].subs({x: x_point, y: y_point}) ** 2 + anti_gradient[1, 0].subs(
+        {x: x_point, y: y_point}) ** 2)
+    # Обратная матрица Гессе (в точке)
+    Hesse_reverse = simplify(Hesse ** (-1)).subs({x: 0, y: 0})
+    # Вектор антиградиента (в точке)
+    anti_grad = anti_gradient.subs({x: 0, y: 0})
+print('конец')
